@@ -1,0 +1,10 @@
+{
+  "name": "dsl-generated dependencies",
+  "dependencies": {
+    "underscore": "latest",
+    "angular": "latest",
+    "restangular": "latest",
+    "angular-ui-router": "latest",
+    "angular-devise": "latest"
+  }
+}
