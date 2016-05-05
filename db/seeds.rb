@@ -15,3 +15,7 @@ User.destroy_all
     password: "password",
     password_confirmation: "password")
 end
+
+6.times do |i|
+  Board.create!.members << User.all.sample
+end

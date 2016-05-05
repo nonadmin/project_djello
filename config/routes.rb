@@ -8,6 +8,12 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'landing#index'
 
+  scope :api do
+    scope :v1 do
+      resources :boards, only: [:index, :show, :create]
+    end
+  end
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
