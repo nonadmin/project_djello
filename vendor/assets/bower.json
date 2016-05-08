@@ -1,7 +1,7 @@
 {
   "name": "dsl-generated dependencies",
   "dependencies": {
-    "underscore": "latest",
+    "lodash": "latest",
     "angular": "latest",
     "restangular": "latest",
     "angular-ui-router": "latest",

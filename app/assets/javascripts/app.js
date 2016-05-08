@@ -8,6 +8,8 @@ var djello = angular.module('djello', ['ui.router', 'restangular', 'Devise'])
 .config(['$stateProvider', '$urlRouterProvider', 
   function($stateProvider, $urlRouterProvider){
 
+  // No Board Index needed, API exposes index but this is only used for 
+  // navigating between boards.
   $stateProvider
     .state('board', {
       url: '/boards/:id',
@@ -16,6 +18,9 @@ var djello = angular.module('djello', ['ui.router', 'restangular', 'Devise'])
       resolve: {
         board: ['BoardsAPI', '$stateParams', function( BoardsAPI, $stateParams){
           return BoardsAPI.show($stateParams.id);
+        }],
+        boards: ['BoardsAPI', function( BoardsAPI){
+          return BoardsAPI.index();
         }],
       }
     });

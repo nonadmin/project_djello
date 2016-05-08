@@ -56,14 +56,57 @@ RSpec.describe BoardsController, "(JSON API)", type: :controller do
 
     describe "POST /boards" do
       it "creates a new board, returns that board" do
-        post_data = { format: :json, board: {title: "some title"} }
+        board_data = { format: :json, board: {title: "some title"} }
 
-        expect{ post :create, post_data }.to change(Board, :count).by(1)  
+        expect{ post :create, board_data }.to change(Board, :count).by(1)  
         expect( json["title"] ).to eq("some title")
       end
 
       it "allows board creation with no attributes/params specified" do
         expect{ post :create, format: :json }.to change(Board, :count).by(1)
+      end
+
+      it "sets the current user as a member of the board" do
+        expect{ post :create, format: :json }.to change(user.boards, :count).by(1)
+      end
+    end
+
+    describe "PUT /boards/:id" do
+      it "updates an existing board, returns that board" do
+        put :update, id: board.id, board: {title: "new title"}, format: :json
+
+        expect(board.reload.title).to eq("new title")
+        expect(json["title"]).to eq("new title")
+      end
+
+      it "returns 422 if board data is invalid" do
+        put :update, id: board.id, board: {title: "a" * 31}, format: :json
+
+        expect(response).to have_http_status(422)
+      end
+
+      it "returns 422 if trying to update another user's board" do
+        put :update, id: another_board.id, board: {title: "bad user"}, format: :json
+
+        expect(response).to have_http_status(422)
+      end
+    end
+
+    describe "DELETE /boards/:id" do
+      it "deletes the board" do
+        expect{ 
+          delete :destroy, id: board.id, format: :json 
+        }.to change(Board, :count).by(-1)
+
+        expect(response).to have_http_status(200)
+      end
+      
+      it "doesn't allow deletion of another user's board" do
+        expect {
+          delete :destroy, id: another_board.id, format: :json
+        }.not_to change(Board, :count)
+
+        expect(response).to have_http_status(422)
       end
     end
   end
@@ -88,6 +131,22 @@ RSpec.describe BoardsController, "(JSON API)", type: :controller do
     describe "POST /boards" do
       it 'returns status of 401' do
         post :create, format: :json
+
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    describe "PUT /boards/:id" do
+      it 'returns status of 401' do
+        put :update, id: board.id, board: {title: "nope"}, format: :json
+
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    describe "DELETE /boards/:id" do
+      it 'returns status of 401' do
+        delete :destroy, id: board.id, format: :json
 
         expect(response).to have_http_status(401)
       end

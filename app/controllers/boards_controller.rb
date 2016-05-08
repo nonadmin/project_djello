@@ -17,22 +17,47 @@ class BoardsController < ApplicationController
   end
 
   def create
-    @board = current_user.boards.new(board_params)
+    @board = Board.new(board_params)
+    @board.members << current_user
 
     respond_to do |format|
       if @board && @board.save
         format.json { render json: @board }
       else
-        format.json { render nothing: true, status: :unprocessable_entry }
+        format.json { render nothing: true, status: :unprocessable_entity }
       end
     end
   end
 
+  def update
+    @board = current_user.boards.find_by_id(params[:id])
+
+    respond_to do |format|
+      if @board && @board.update(board_params)
+        format.json { render json: @board, include: [:lists] }
+      else
+        format.json { render nothing: true, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def destroy
+    @board = current_user.boards.find_by_id(params[:id])
+
+    respond_to do |format|
+      if @board && @board.destroy
+        format.json { render nothing: true }
+      else
+        format.json { render nothing: true, status: :unprocessable_entity }
+      end
+    end
+  end
 
   private
 
+
   def board_params
-    if params[:board]
+    if params[:board] && !params[:board].blank?
       params.require(:board).permit(:title)
     end
   end
