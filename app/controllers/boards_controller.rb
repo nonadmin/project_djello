@@ -46,7 +46,7 @@ class BoardsController < ApplicationController
 
     respond_to do |format|
       if @board && @board.destroy
-        format.json { render nothing: true }
+        format.json { render json: @board }
       else
         format.json { render nothing: true, status: :unprocessable_entity }
       end

@@ -16,11 +16,16 @@ djello.factory('BoardsAPI', ['Restangular', function(Restangular){
     return board.put();
   };
 
+  var remove = function(board){
+    return board.remove();
+  };
+
   return {
     index: index,
     show: show,
     create: create,
     update: update,
+    remove: remove,
   };
 
 }]);
