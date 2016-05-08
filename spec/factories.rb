@@ -1,4 +1,10 @@
 FactoryGirl.define do
+  
+  factory :list do
+    sequence(:position) { |n| n }
+    title "Some List"
+    description "List of Cards"
+  end
 
   factory :board do
     

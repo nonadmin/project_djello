@@ -3,5 +3,5 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :rememberable, :trackable, :validatable
 
-  has_and_belongs_to_many :boards
+  has_and_belongs_to_many :boards, dependent: :destroy
 end

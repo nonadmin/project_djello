@@ -7,6 +7,8 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 User.destroy_all
+Board.destroy_all
+List.destroy_all
 
 3.times do |i|
   User.create!(
@@ -17,5 +19,8 @@ User.destroy_all
 end
 
 6.times do |i|
-  Board.create!.members << User.all.sample
+  b = Board.create!
+  b.members << User.all.sample
+  b.lists << List.new(position: 0)
 end
+

@@ -1,0 +1,14 @@
+<div class="form-horizontal">
+  <div class="form-group">
+
+    <label for="boardSelect" class="col-sm-4 control-label">Select Board</label>
+    <div class="col-sm-8">      
+      <select id="boardSelect" name="boardSelect" class="form-control" 
+              ng-model="selectedBoard" 
+              ng-change="go()" 
+              ng-options="board.id as board.title for board in boards track by board.id">
+      </select>
+    </div>
+
+  </div>
+</div>

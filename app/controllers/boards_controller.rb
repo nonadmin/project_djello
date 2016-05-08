@@ -4,7 +4,7 @@ class BoardsController < ApplicationController
     @boards = current_user.boards
 
     respond_to do |format|
-      format.json { render json: @boards.to_json }
+      format.json { render json: @boards }
     end
   end
 
@@ -12,7 +12,7 @@ class BoardsController < ApplicationController
     @board = current_user.boards.find_by_id(params[:id])
 
     respond_to do |format|
-      format.json { render json: @board.to_json }
+      format.json { render json: @board, include: [:lists] }
     end
   end
 
@@ -21,7 +21,7 @@ class BoardsController < ApplicationController
 
     respond_to do |format|
       if @board && @board.save
-        format.json { render json: @board.to_json }
+        format.json { render json: @board }
       else
         format.json { render nothing: true, status: :unprocessable_entry }
       end

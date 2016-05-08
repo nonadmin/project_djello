@@ -1,13 +1,14 @@
 require 'rails_helper'
 
-RSpec.describe BoardsController, type: :controller do
+RSpec.describe BoardsController, "(JSON API)", type: :controller do
 
-  let(:board) { create(:board, title: "Neato") }
+  let(:list) { create(:list, title: "Some List") }
+  let(:board) { create(:board, title: "Neato", lists: [list]) }
   let(:user) { create(:user, boards: [board]) }
   let!(:another_board) { create(:board) }
   let(:json) { JSON.parse( response.body ) }
 
-  describe "Authenticated Users" do
+  context "Authenticated Users" do
     before do
       sign_in user
     end
@@ -21,10 +22,16 @@ RSpec.describe BoardsController, type: :controller do
         expect(json[0]["title"]).to eq(board.title)
       end
 
-      it "only returns the current user's boards" do
+      it "does not return another user's boards" do
         expect(Board.all.length).to eq(2)
         expect(json.length).to eq(1)
       end
+
+      # Board Index is just building a drop down, don't need anything
+      # but board title and ID
+      # it "also returns all lists associated with each board" do
+      #   expect(json[0]["lists"].length).to eq(1)
+      # end
     end
 
     describe "GET /boards/:id" do
@@ -38,6 +45,12 @@ RSpec.describe BoardsController, type: :controller do
         get :show, id: another_board.id, format: :json
         
         expect(response.body).to eq("null")
+      end
+
+      it "also returns all lists associated with the board" do
+        get :show, id: board.id, format: :json
+
+        expect(json["lists"][0]["title"]).to eq(list.title)
       end
     end
 
@@ -55,7 +68,7 @@ RSpec.describe BoardsController, type: :controller do
     end
   end
 
-  describe "Unauthenticated Users" do
+  context "Unauthenticated Users" do
     describe "GET /boards" do
       it 'returns status of 401' do
         get :index, format: :json
