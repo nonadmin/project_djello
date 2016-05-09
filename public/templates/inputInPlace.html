@@ -1,0 +1,58 @@
+<div click-out="resetForm()">    
+  <div ng-show="!formData.visible" ng-click="formData.visible = true">
+    <!-- Insert our text, title, description, etc -->
+    <ng-transclude></ng-transclude>
+  </div>
+
+  <!-- 
+    Have to use switch here because of annoying diferences between
+    input and textarea :(, ng-switch also creates a new scope, which is ok
+    since we're using objects everywhere.  Except for the form name, which
+    we want to check in the directive controller for validately so we use
+    $parent here to refer to that scope.
+  -->
+  <div ng-switch="field.type">  
+    <form name="$parent.changeForm" class="form-inline" ng-submit="submit()" 
+          ng-show="formData.visible" novalidate ng-switch-when="text">
+      <div class="form-group" ng-class="{ 'has-error': $parent.changeForm.changeName.$invalid }">    
+        <input type="text" 
+               name="changeName"
+               class="form-control" 
+               ng-model="formData.inputModel"
+               ng-maxlength="field.maxlength"
+               ng-minlength="field.minlength"
+
+               focus-when="{{ formData.visible }}"
+               >
+      </div>
+      <button type="submit" class="btn btn-primary">
+        Save
+      </button>
+      <button type="button" class="btn btn-default" ng-click="resetForm()">
+        Cancel
+      </button>
+    </form>
+
+    <form name="$parent.changeForm" ng-submit="submit()" 
+          ng-show="formData.visible" novalidate ng-switch-when="textarea">
+      <div class="form-group" ng-class="{ 'has-error': $parent.changeForm.changeName.$invalid }">    
+        <textarea  
+               name="changeName"
+               class="form-control" 
+               ng-model="formData.inputModel"
+               ng-maxlength="field.maxlength"
+               ng-minlength="field.minlength"
+               rows="5"
+
+               focus-when="{{ formData.visible }}"
+               >
+      </textarea>
+      <button type="submit" class="btn btn-primary">
+        Save
+      </button>
+      <button type="button" class="btn btn-default" ng-click="resetForm()">
+        Cancel
+      </button>
+    </form>
+  </div>
+</div>

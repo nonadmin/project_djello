@@ -3,18 +3,14 @@ djello.controller('BoardShowCtrl', ['$scope', '$state', '$timeout', 'board', 'bo
 
   $scope.board = board;
   $scope.boards = boards;
-  $scope.inputTitle = board.title;
-  $scope.showInput = false;
+  $scope.titleFieldOpts = {
+    type: 'text',
+    maxlength: 30,
+  };
 
-  $scope.hideInput = function(){
-    if ($scope.boardForm.$valid) {    
-      $scope.saved = false;
-      $timeout(function () { // delay hiding incase ng-submit
-          if ($scope.saved) return;
-          $scope.inputTitle = board.title;
-          $scope.showInput = false;
-      }, 100);
-    }
+  $scope.resetForm = function(){
+    $scope.formData.visible = false;
+    $scope.formData.title = board.title;
   };
 
   $scope.newBoard = function(){
@@ -25,22 +21,14 @@ djello.controller('BoardShowCtrl', ['$scope', '$state', '$timeout', 'board', 'bo
   };
 
   $scope.updateBoard = function(){
-    $scope.saved = true;
+    BoardsAPI.update($scope.board)
+      .then(function(board){
+        $scope.board = board;
 
-    if ($scope.boardForm.$valid) {
-      $scope.board.title = $scope.inputTitle;
-
-      BoardsAPI.update($scope.board)
-        .then(function(board){
-          $scope.showInput = false;
-          $scope.board = board;
-          $scope.inputTitle = board.title;
-
-          // Update the boards object used by the boardSelect directive
-          var idx = _.findIndex($scope.boards, ['id', board.id]);
-          $scope.boards.splice(idx, 1, board);
-          });
-    }
+        // Update the boards object used by the boardSelect directive
+        var idx = _.findIndex($scope.boards, ['id', board.id]);
+        $scope.boards.splice(idx, 1, board);
+        });
   };
 
   $scope.deleteBoard = function(){
@@ -49,5 +37,9 @@ djello.controller('BoardShowCtrl', ['$scope', '$state', '$timeout', 'board', 'bo
         $state.go('boards');
       });
   };
+
+  // $scope.$watch('board', function(v){
+  //   console.log(v);
+  // });
 
 }]);

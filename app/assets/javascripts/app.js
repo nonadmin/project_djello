@@ -28,7 +28,6 @@ var djello = angular.module('djello', ['ui.router', 'restangular', 'Devise'])
       controller: 'BoardShowCtrl',
       resolve: {
         board: ['BoardsAPI', '$stateParams', function( BoardsAPI, $stateParams ){
-          console.log($stateParams);
           return BoardsAPI.show($stateParams.id);
         }],
         boards: ['BoardsAPI', function( BoardsAPI ){

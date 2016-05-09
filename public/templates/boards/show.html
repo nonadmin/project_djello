@@ -1,29 +1,10 @@
 <div class="row">
   <div class="col-sm-8">
-    <div ng-show="!showInput" ng-click="showInput = true">
+    <input-in-place model="board.title" save-fn="updateBoard()" field="titleFieldOpts">
       <h3>{{ board.title == "Untitled" ? "Add Board title..." : board.title }}</h3>
-    </div>
+    </input-in-place>
 
-    <form name="boardForm" class="form-inline" ng-submit="updateBoard()" ng-show="showInput" novalidate>
-      <div class="form-group" ng-class="{ 'has-error': boardForm.title.$invalid }">
-        <label class="sr-only" for="title">Board Title</label>      
-        <input type="text" 
-               name="title"
-               class="form-control" 
-               ng-model="inputTitle"
-               ng-maxlength="30"
 
-               focus-when="{{ showInput }}"
-               ng-blur="hideInput()"
-               >
-      </div>
-      <button type="submit" class="btn btn-primary">
-        Save
-      </button>
-      <button type="button" class="btn btn-default" ng-click="hideInput()">
-        Cancel
-      </button>
-    </form>
   </div>
 
   <div class="col-sm-4">
