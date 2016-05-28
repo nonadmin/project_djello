@@ -26,12 +26,6 @@ RSpec.describe BoardsController, "(JSON API)", type: :controller do
         expect(Board.all.length).to eq(2)
         expect(json.length).to eq(1)
       end
-
-      # Board Index is just building a drop down, don't need anything
-      # but board title and ID
-      # it "also returns all lists associated with each board" do
-      #   expect(json[0]["lists"].length).to eq(1)
-      # end
     end
 
     describe "GET /boards/:id" do
