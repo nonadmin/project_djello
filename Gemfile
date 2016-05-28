@@ -38,6 +38,7 @@ gem 'bower-rails', '~> 0.10.0'
 group :development, :test do
   # Testing
   gem 'factory_girl_rails', '~> 4.0'
+  gem 'shoulda-matchers', '~> 3.1'
   gem 'rspec-rails'
 
   # Call 'binding.pry' anywhere in the code to stop execution and get a debugger console

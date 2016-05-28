@@ -46,12 +46,6 @@ RSpec.describe BoardsController, "(JSON API)", type: :controller do
         
         expect(response.body).to eq("null")
       end
-
-      it "also returns all lists associated with the board" do
-        get :show, id: board.id, format: :json
-
-        expect(json["lists"][0]["title"]).to eq(list.title)
-      end
     end
 
     describe "POST /boards" do
