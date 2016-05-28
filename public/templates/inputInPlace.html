@@ -1,4 +1,4 @@
-<div click-out="resetForm()">    
+<div click-out="resetForm()" key-code="resetForm()" code="27">    
   <div ng-show="!formData.visible" ng-click="formData.visible = true">
     <!-- Insert our text, title, description, etc -->
     <ng-transclude></ng-transclude>
@@ -22,8 +22,7 @@
                ng-maxlength="field.maxlength"
                ng-minlength="field.minlength"
 
-               focus-when="{{ formData.visible }}"
-               >
+               focus-when="{{ formData.visible }}">
       </div>
       <button type="submit" class="btn btn-primary">
         Save
@@ -36,16 +35,14 @@
     <form name="$parent.changeForm" ng-submit="submit()" 
           ng-show="formData.visible" novalidate ng-switch-when="textarea">
       <div class="form-group" ng-class="{ 'has-error': $parent.changeForm.changeName.$invalid }">    
-        <textarea  
-               name="changeName"
-               class="form-control" 
-               ng-model="formData.inputModel"
-               ng-maxlength="field.maxlength"
-               ng-minlength="field.minlength"
-               rows="5"
-
-               focus-when="{{ formData.visible }}"
-               >
+        <textarea name="changeName"
+                  class="form-control" 
+                  ng-model="formData.inputModel"
+                  ng-maxlength="field.maxlength"
+                  ng-minlength="field.minlength"
+                  rows="5"
+ 
+                  focus-when="{{ formData.visible }}">
       </textarea>
       <button type="submit" class="btn btn-primary">
         Save
