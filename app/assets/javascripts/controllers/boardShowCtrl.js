@@ -1,6 +1,6 @@
-djello.controller('BoardShowCtrl', ['$scope', '$state', '$timeout', 'board', 'boards', 'BoardsAPI',
-  function($scope, $state, $timeout, board, boards, BoardsAPI){
-
+djello.controller('BoardShowCtrl', ['$scope', '$state', '$timeout', 'board', 'boards', 'BoardsAPI', 'Restangular',
+  function($scope, $state, $timeout, board, boards, BoardsAPI, Restangular){
+ 
   $scope.board = board;
   $scope.boards = boards;
   $scope.titleFieldOpts = {
@@ -34,12 +34,9 @@ djello.controller('BoardShowCtrl', ['$scope', '$state', '$timeout', 'board', 'bo
   $scope.deleteBoard = function(){
     BoardsAPI.remove($scope.board)
       .then(function(board){
-        $state.go('boards');
+        $state.go('redirect');
       });
   };
 
-  // $scope.$watch('board', function(v){
-  //   console.log(v);
-  // });
 
 }]);

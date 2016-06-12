@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe BoardsController, "(JSON API)", type: :controller do
 
-  let(:list) { create(:list, title: "Some List") }
+  let(:card) { create(:card, title: "Just a card") }
+  let(:list) { create(:list, title: "Some List", cards: [card]) }
   let(:board) { create(:board, title: "Neato", lists: [list]) }
   let(:user) { create(:user, boards: [board]) }
   let!(:another_board) { create(:board) }
@@ -23,12 +24,20 @@ RSpec.describe BoardsController, "(JSON API)", type: :controller do
       end
 
       it "does not return another user's boards" do
-        expect(Board.all.length).to eq(2)
+        expect(Board.all.length).to be > 1
         expect(json.length).to eq(1)
       end
+
+      # Board Index is just building a drop down, don't need anything
+      # but board title and ID
+      # it "also returns all lists associated with each board" do
+      #   expect(json[0]["lists"].length).to eq(1)
+      # end
     end
 
     describe "GET /boards/:id" do
+      render_views # use jbuilder here, need to render views
+
       it "returns the board with the :id" do
         get :show, id: board.id, format: :json
 
@@ -38,7 +47,19 @@ RSpec.describe BoardsController, "(JSON API)", type: :controller do
       it "does not return another user's board" do
         get :show, id: another_board.id, format: :json
         
-        expect(response.body).to eq("null")
+        expect(response).to have_http_status(404)
+      end
+
+      it "returns all lists associated with the board" do
+        get :show, id: board.id, format: :json
+
+        expect(json["lists"][0]["title"]).to eq(list.title)
+      end
+
+      it "returns all cards associated with the board's lists" do
+        get :show, id: board.id, format: :json
+
+        expect(json["lists"][0]["cards"][0]["title"]).to eq(card.title)
       end
     end
 
@@ -60,6 +81,8 @@ RSpec.describe BoardsController, "(JSON API)", type: :controller do
     end
 
     describe "PUT /boards/:id" do
+      render_views # use jbuilder here, need to render views
+
       it "updates an existing board, returns that board" do
         put :update, id: board.id, board: {title: "new title"}, format: :json
 
@@ -77,6 +100,18 @@ RSpec.describe BoardsController, "(JSON API)", type: :controller do
         put :update, id: another_board.id, board: {title: "bad user"}, format: :json
 
         expect(response).to have_http_status(422)
+      end
+
+      it "returns all lists associated with the board" do
+        put :update, id: board.id, board: {title: "new title"}, format: :json
+
+        expect(json["lists"][0]["title"]).to eq(list.title)
+      end
+
+      it "returns all cards associated with the board's lists" do
+        put :update, id: board.id, board: {title: "new title"}, format: :json
+
+        expect(json["lists"][0]["cards"][0]["title"]).to eq(card.title)
       end
     end
 

@@ -11,3 +11,9 @@
     <a href="javascript:void(0)" ng-click="deleteBoard()">Delete Board</a>
   </div>
 </div>
+
+<div class="row">
+  <div class="col-sm-4" style="word-wrap: break-word;" ng-repeat="list in board.lists">
+    <list-elem list="list"></list-elem>
+  </div>
+</div>

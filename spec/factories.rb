@@ -1,13 +1,13 @@
 FactoryGirl.define do
   factory :card do
-    title "MyString"
-    description "MyText"
+    title "TestCard"
+    description "A Task Card"
     association :list
   end
   
   factory :list do
     sequence(:position) { |n| n }
-    title "Some List"
+    title "TestList"
     description "List of Cards"
     association :board
   end

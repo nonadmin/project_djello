@@ -1,0 +1,11 @@
+<input-in-place model="list.title" save-fn="updateList()" field="titleFieldOpts">
+  <h4>{{ list.title ? list.title : "Add List title..."  }}</h4>
+</input-in-place>
+
+<input-in-place model="list.description" save-fn="updateList()" field="descriptionFieldOpts">
+  <em>{{ list.description ? list.description : "Add List description..." }}</em>
+</input-in-place>
+
+<br><br>
+{{ list }}
+{{ list.description }}

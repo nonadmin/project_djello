@@ -5,7 +5,12 @@ djello.factory('BoardsAPI', ['Restangular', function(Restangular){
   };
 
   var show = function(id){
-    return Restangular.one('boards', id).get();
+    return Restangular.one('boards', id).get().then(function(board){
+      Restangular.restangularizeCollection(
+        board, board.lists, 'lists');
+      
+      return board;   
+    });
   };
 
   var create = function(){
@@ -13,7 +18,12 @@ djello.factory('BoardsAPI', ['Restangular', function(Restangular){
   };
 
   var update = function(board){
-    return board.put();
+    return board.put().then(function(board){
+      Restangular.restangularizeCollection(
+        board, board.lists, 'lists');
+
+      return board;
+    });
   };
 
   var remove = function(board){
